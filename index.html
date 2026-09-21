@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <title>Дырявый в центре</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            background-color: #000000;
+        }
+
+        
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        
+        .content {
+            position: relative;
+            z-index: 1; 
+            text-align: center;
+            max-width: 100%;
+            width: 580px;
+        }
+
+      
+        .canvas-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+      
+        canvas {
+            cursor: crosshair;
+            border: 1px solid #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            max-width: 100%;
+            width: 500px;
+            height: auto;
+            display: block;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: #222;
+        }
+
+        .arrow-btn {
+            background-color: rgba(255, 0, 0, 0.8);
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .arrow-btn:hover {
+            background-color: #ffffff;
+            color: #ff0000;
+            transform: scale(1.1);
+        }
+
+        .arrow-btn:active {
+            transform: scale(0.9);
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #ffffff;
+            line-height: 1.4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), -2px -2px 4px rgba(0, 0, 0, 0.9);
+        }
+
+       
+        .clear-btn {
+            background-color: #ff0000;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 15px;
+            margin-right: 10px;
+        }
+
+        .clear-btn:hover {
+            background-color: #ffffff;
+            color: #ff0000;
+            transform: scale(1.05);
+        }
+
+        .clear-btn:active {
+            transform: scale(0.95);
+        }
+
+      
+        .donate-btn {
+            display: inline-block;
+            background-color: #ff9100; 
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 6px;
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 15px;
+        }
+
+        .donate-btn:hover {
+            background-color: #ffffff;
+            color: #ff9100;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 145, 0, 0.8); 
+        }
+
+        .donate-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+<body onpointermove="document.getElementById('bgAudio').play();" 
+      onclick="document.getElementById('bgAudio').play();" 
+      onscroll="document.getElementById('bgAudio').play();" 
+      style="margin: 0; padding: 0; overflow-x: hidden;">
+
+   
+    <video class="video-bg" autoplay loop muted playsinline style="width: 100%; height: 100vh; object-fit: cover; position: fixed; top: 0; left: 0; z-index: -1;">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    
+    <audio id="bgAudio" loop prelaod="auto">
+        <source src="background.aac" type="audio/aac">
+    </audio>
+
+</body>
+
+    <div class="content">
+        
+        <div class="canvas-container">
+            <button class="arrow-btn" id="prevBtn">❬</button>
+            <canvas id="canvas" width="500" height="500"></canvas>
+            <button class="arrow-btn" id="nextBtn">❭</button>
+        </div>
+        
+        
+        <p>Нажми что бы обстрелять спермой лоха!</p>
+        <p>ЮЗ дырявого в тг: @Sasder5.</p>
+
+        
+        <div>
+            <button class="clear-btn" id="clearBtn">Смыть сперму</button>
+            <a href="https://www.donationalerts.com/r/yapsixebaniy" target="_blank" class="donate-btn">
+                Поблагодарить за удовольствие 💰
+            </a>
+        </div>
+    </div>
+   <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const clearBtn = document.getElementById('clearBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const audio = document.getElementById('bgAudio');
+
+    let isDrawing = false; 
+    let lastSplatterTime = 0; 
+    let drawingOpacity = 1.0; 
+    let isClearing = false;
+    let splatters = []; 
+    const splatterInterval = 40; 
+
+    const images = ['zov.jpg', 'zov1.jpg', 'zov2.jpg', 'zov3.jpg']; 
+    let currentImgIndex = 0; 
+
+    const img = new Image();
+
+    function drawBaseImage() {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    function loadCanvasImage() {
+        isClearing = false;      
+        drawingOpacity = 1.0;     
+        splatters = [];           
+        img.src = images[currentImgIndex];
+    }
+
+    img.onload = function() {
+        render();
+    };
+    loadCanvasImage();
+
+    prevBtn.addEventListener('click', function() {
+        currentImgIndex--;
+        if (currentImgIndex < 0) currentImgIndex = images.length - 1;
+        loadCanvasImage();
+    });
+
+    nextBtn.addEventListener('click', function() {
+        currentImgIndex++;
+        if (currentImgIndex >= images.length) currentImgIndex = 0;
+        loadCanvasImage();
+    });
+
+    
+    clearBtn.addEventListener('click', function() {
+        if (isClearing || splatters.length === 0) return;
+        isClearing = true;
+
+        const startTime = Date.now();
+        const duration = 4000; 
+
+        function fadeOut() {
+            const elapsed = Date.now() - startTime;
+            drawingOpacity = 1.0 - (elapsed / duration);
+
+            if (drawingOpacity <= 0) {
+                drawingOpacity = 1.0;
+                splatters = []; 
+                isClearing = false; 
+                render();
+            } else {
+                render();
+                requestAnimationFrame(fadeOut); 
+            }
+        }
+        requestAnimationFrame(fadeOut);
+    });
+
+    
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        drawBaseImage(); 
+
+        ctx.save();
+        ctx.globalAlpha = drawingOpacity;
+
+        splatters.forEach(s => {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            drawSavedBlob(s.mainBlobPoints);
+
+            s.subBlobsData.forEach(sb => {
+                drawSavedBlob(sb.points);
+            });
+
+            s.dropsData.forEach(d => {
+                if (d.type === 'line') {
+                    ctx.beginPath();
+                    ctx.lineWidth = d.dropRadius;
+                    ctx.lineCap = 'round';
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${d.opacity})`;
+                    ctx.moveTo(d.x1, d.y1);
+                    ctx.lineTo(d.x2, d.y2);
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${d.opacity})`;
+                    drawSavedBlob(d.points);
+                }
+            });
+        });
+
+        ctx.restore();
+    }
+
+    
+    function drawSavedBlob(points) {
+        if (!points || points.length === 0) return;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    
+    function generateBlobPoints(cx, cy, baseRadius, spikesCount) {
+        const points = [];
+        for (let i = 0; i < spikesCount; i++) {
+            const angle = (i / spikesCount) * Math.PI * 2;
+            const randomFactor = 0.6 + Math.random() * 0.7; 
+            const r = baseRadius * randomFactor;
+            points.push({
+                x: cx + Math.cos(angle) * r,
+                y: cy + Math.sin(angle) * r
+            });
+        }
+        return points;
+    }
+
+   
+    function generateSplatter(clientX, clientY) {
+        if (isClearing) return; 
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        const x = (clientX - rect.left) * scaleX;
+        const y = (clientY - rect.top) * scaleY;
+
+        const mainRadius = 12 + Math.random() * 8;
+        
+        const splatterData = {
+            mainBlobPoints: generateBlobPoints(x, y, mainRadius, 14),
+            subBlobsData: [],
+            dropsData: []
+        };
+
+        const subBlobs = 1 + Math.floor(Math.random() * 2);
+        for (let i = 0; i < subBlobs; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 12;
+            const sbX = x + Math.cos(angle) * dist;
+            const sbY = y + Math.sin(angle) * dist;
+            const sbR = 5 + Math.random() * 4;
+            
+            splatterData.subBlobsData.push({
+                points: generateBlobPoints(sbX, sbY, sbR, 10)
+            });
+        }
+
+        const dropCount = 20 + Math.floor(Math.random() * 15);
+        const maxRadius = 75;
+
+        for (let i = 0; i < dropCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.pow(Math.random(), 1.6) * maxRadius;
+            const dropX = x + Math.cos(angle) * distance;
+            const dropY = y + Math.sin(angle) * distance;
+            const dropRadius = 0.6 + Math.random() * 3.5;
+            const opacity = (1 - (distance / maxRadius)) * 0.6 + 0.3;
+
+            if (Math.random() < 0.25 && distance > 20) {
+                splatterData.dropsData.push({
+                    type: 'line',
+                    dropRadius: dropRadius,
+                    opacity: opacity,
+                    x1: dropX,
+                    y1: dropY,
+                    x2: dropX - Math.cos(angle) * (dropRadius * 2.5),
+                    y2: dropY - Math.sin(angle) * (dropRadius * 2.5)
+                });
+            } else {
+                splatterData.dropsData.push({
+                    type: 'circle',
+                    opacity: opacity,
+                    points: generateBlobPoints(dropX, dropY, dropRadius, 6)
+                });
+            }
+        }
+
+        splatters.push(splatterData);
+        render();
+    }
+
+   
+    canvas.addEventListener('mousedown', function(event) {
+        isDrawing = true;
+        generateSplatter(event.clientX, event.clientY);
+    });
+
+    window.addEventListener('mousemove', function(event) {
+        if (!isDrawing) return;
+        const currentTime = Date.now();
+        if (currentTime - lastSplatterTime > splatterInterval) {
+            generateSplatter(event.clientX, event.clientY);
+            lastSplatterTime = currentTime;
+        }
+    });
+
+    window.addEventListener('mouseup', function() {
+        isDrawing = false;
+    });
+    canvas.addEventListener('mouseleave', function() {
+        isDrawing = false;
+    });
+    function startAutoplay() {
+        audio.play().then(() => {
+            document.removeEventListener('click', startAutoplay);
+            document.removeEventListener('touchstart', startAutoplay);
+        }).catch(error => {
+          
+        });
+    }
+
+    document.addEventListener('click', startAutoplay);
+    document.addEventListener('touchstart', startAutoplay);
+</script>
+
+</body>
+</html>
