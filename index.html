@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="./index.css">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <title>Дырявый в центре</title>
+</head>
+<body onpointermove="document.getElementById('bgAudio').play();" 
+      onclick="document.getElementById('bgAudio').play();" 
+      onscroll="document.getElementById('bgAudio').play();">
+
+    <video id="toiletVideo" class="fullscreen-video-bg" loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+    
+    </video>
+
+<div class="ai-modal-overlay" id="aiDisclaimerModal">
+    <div class="ai-modal-window">
+        <div class="ai-modal-text">
+            Все персонажи и лица в данном приложении сгенерированы искусственным интеллектом (ИИ). Любое сходство с реальными людьми абсолютно случайно и не задумывалось авторами.
+        </div>
+        <button class="ai-modal-btn" onclick="closeAiModal()">Понятно</button>
+    </div>
+</div>
+    
+    <div class="content">
+        <div class="canvas-container">
+            <button class="arrow-btn" id="prevBtn">❬</button>
+            <canvas id="canvas" width="1200" height="1200"></canvas>
+            <button class="arrow-btn" id="nextBtn">❭</button>
+        </div>
+        
+        <p>Нажми что бы обстрелять спермой лоха!</p>
+
+        <div>
+            <button class="clear-btn" id="clearBtn">Смыть сперму</button>
+            <a href="https://www.donationalerts.com/r/yapsixebaniy" target="_blank" class="donate-btn">
+                Поблагодарить за удовольствие 💰
+            </a>
+        </div>
+    </div>
+    <div>
+        <button id="toiletBtn" class="btn toilet-btn" onclick="openToiletBackground(event)">Войти в туалет "Ауры"</button>
+    </div>
+
+
+<script src="./index.js"></script>
+</body>
+</html>
